@@ -14,7 +14,7 @@ class Product(TimeStampedModel):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     man = models.BooleanField(default=True)
-    man = models.BooleanField(default=False)
+    woman = models.BooleanField(default=False)
     weight = models.DecimalField(max_digits=5, decimal_places=2, default=1)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
     price = models.DecimalField(max_digits=10, decimal_places=2)

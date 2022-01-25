@@ -22,9 +22,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
-        return self.username
-
-    def email(self):
         return self.email
 
     def get_full_name(self):

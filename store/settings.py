@@ -39,6 +39,11 @@ INSTALLED_APPS = [
     # Third party apps
     "django.contrib.postgres",
     "rest_framework",
+    # Local apps
+    'applications.product',
+    'applications.user',
+    'applications.sale',
+    'applications.home'
 ]
 
 MIDDLEWARE = [
@@ -105,6 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+AUTH_USER_MODEL = 'user.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
