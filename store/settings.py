@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from unipath import Path
 from dotenv import load_dotenv
 import os
+import firebase_admin
+from firebase_admin import credentials
 
 load_dotenv()
 
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     # Third party apps
     "django.contrib.postgres",
     "rest_framework",
+    "rest_framework.authtoken",
     # Local apps
     'applications.product',
     'applications.user',
@@ -140,3 +143,5 @@ MEDIA_ROOT = 'media'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+firebase_admin.initialize_app(credentials.Certificate("fbkey.json"))
