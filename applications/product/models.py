@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from model_utils.models import TimeStampedModel
+from .managers import ProductManager
 
 
 class Color(TimeStampedModel):
@@ -19,16 +20,18 @@ class Product(TimeStampedModel):
     cost = models.DecimalField(max_digits=10, decimal_places=2)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     main_image = models.ImageField(upload_to='products/', blank=True)
-    image1 = models.ImageField(null=True, blank=True)
-    image2 = models.ImageField(null=True, blank=True)
-    image3 = models.ImageField(null=True, blank=True)
-    image4 = models.ImageField(null=True, blank=True)
+    image1 = models.ImageField(null=True, blank=True, upload_to='products/')
+    image2 = models.ImageField(null=True, blank=True, upload_to='products/')
+    image3 = models.ImageField(null=True, blank=True, upload_to='products/')
+    image4 = models.ImageField(null=True, blank=True, upload_to='products/')
     colors = models.ManyToManyField(Color)
     video = models.URLField(blank=True, null=True)
     stock = models.PositiveIntegerField(default=0)
     sales = models.PositiveIntegerField(default=0)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    objects = ProductManager()
 
     def __str__(self):
         return self.name

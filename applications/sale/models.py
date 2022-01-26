@@ -34,7 +34,6 @@ class Sale(TimeStampedModel):
         max_length=2, choices=STATE_CHOICES, blank=True, null=True)
     canceled = models.BooleanField(default=False)
     address = models.TextField()
-    anulated = models.BooleanField(default=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
 
@@ -47,7 +46,7 @@ class Detail(TimeStampedModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(
         default=1, null=True, blank=True)
-    anulate = models.BooleanField(default=False)
+    canceled = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{str(self.id)} - {str(self.product.name)}'

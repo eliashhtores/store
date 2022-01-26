@@ -1,5 +1,5 @@
 const http = new EasyHTTP()
-const server = 'http://127.0.0.1:8000/api/v1'
+const server = 'http://localhost:8000/api/v1'
 
 document.querySelector('#login').addEventListener('click', () => {
     const firebaseConfig = {
@@ -17,19 +17,22 @@ document.querySelector('#login').addEventListener('click', () => {
         .signInWithPopup(provider)
         .then((result) => {
             /** @type {firebase.auth.OAuthCredential} */
-            const token = result.credential.idToken
             const user = result.user
             user.getIdToken()
                 .then((idToken) => {
-                    console.log(idToken)
+                    const data = {
+                        'token_id': idToken
+                    }
+                    http.post(`${server}/user/login`, data)
+                        .then((response) => {
+                            console.log(response)
+                        }).catch((error) => {
+                            console.error(error)
+                        })
                 }).catch((error) => {
                     console.error(error)
                 })
         }).catch((error) => {
-            // const errorCode = error.code
-            // const errorMessage = error.message
-            // const email = error.email
-            // const credential = error.credential
             console.error(error)
         })
 })

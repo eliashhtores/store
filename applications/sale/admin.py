@@ -11,7 +11,7 @@ class SaleAdmin(admin.ModelAdmin):
 
 class DetailAdmin(admin.ModelAdmin):
     list_display = ('sale', 'product', 'quantity')
-    list_filter = ('sale', 'product')
+    list_filter = ('product',)
     search_fields = ('sale', 'product')
     ordering = ('id',)
 
