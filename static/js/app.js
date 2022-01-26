@@ -17,9 +17,14 @@ document.querySelector('#login').addEventListener('click', () => {
         .signInWithPopup(provider)
         .then((result) => {
             /** @type {firebase.auth.OAuthCredential} */
-            const credential = result.credential
-            const token = credential.idToken
-            // const user = result.user
+            const token = result.credential.idToken
+            const user = result.user
+            user.getIdToken()
+                .then((idToken) => {
+                    console.log(idToken)
+                }).catch((error) => {
+                    console.error(error)
+                })
         }).catch((error) => {
             // const errorCode = error.code
             // const errorMessage = error.message

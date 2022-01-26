@@ -12,9 +12,8 @@ class GoogleLoginView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        decoded_token = auth.verify_id_token(
-            token_id=serializer.data.get('token_id', None)
-        )
+        token_id = serializer.data.get('token_id', None)
+        decoded_token = auth.verify_id_token(token_id)
         email = decoded_token['email']
         name = decoded_token['name']
         # picture = decoded_token['picture']
