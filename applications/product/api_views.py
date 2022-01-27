@@ -21,3 +21,23 @@ class ProductStockAPIView(ListAPIView):
 
     def get_queryset(self):
         return Product.objects.get_product_stock()
+
+
+class ProductByGenderAPIView(ListAPIView):
+    serializer_class = ProductSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def get_queryset(self):
+        return Product.objects.products_by_gender(self.kwargs['gender']).order_by('id')
+
+
+class ProductFilterAPIView(ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        return Product.objects.filter_products(
+            man=self.request.query_params.get('man', None),
+            woman=self.request.query_params.get('woman', None),
+            name=self.request.query_params.get('name', None)
+        )

@@ -9,8 +9,15 @@ class ProductManager(models.Manager):
         return self.filter(stock__gt=0).order_by('sales')
 
     def products_by_gender(self, gender):
+        woman = True
+        man = True
         if gender == 'm':
-            return self.filter(gender=gender)
+            woman = False
+            return self.filter(woman=woman, man=man)
         if gender == 'w':
-            return self.filter(gender=gender)
-            return self.filter(gender=gender)
+            man = False
+            return self.filter(woman=woman, man=man)
+        return self.filter(woman=woman, man=man)
+
+    def filter_products(self, **kwargs):
+        return self.filter(woman=kwargs['woman'], man=kwargs['man'], name__icontains=kwargs['name'])

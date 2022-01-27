@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from model_utils.models import TimeStampedModel
 from applications.product.models import Product
+from .managers import DetailManager
 
 
 class Sale(TimeStampedModel):
@@ -47,6 +48,8 @@ class Detail(TimeStampedModel):
     quantity = models.PositiveIntegerField(
         default=1, null=True, blank=True)
     canceled = models.BooleanField(default=False)
+
+    objects = DetailManager()
 
     def __str__(self):
         return f'{str(self.id)} - {str(self.product.name)}'
