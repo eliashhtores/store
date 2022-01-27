@@ -8,10 +8,14 @@
  * 
  **/
 
+// @@ TODO: Get token from LocalStorage
 class EasyHTTP {
     // Make an HTTP GET Request
     async get(url) {
-        const response = await fetch(url)
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: { 'Authorization': 'Token fe207526177977cfc9f5453c48c6bcfc040f35f5' },
+        })
         const resData = await response.json()
         return resData
     }
@@ -22,7 +26,8 @@ class EasyHTTP {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Authorization': 'Token fe207526177977cfc9f5453c48c6bcfc040f35f5'
             },
             body: JSON.stringify(data)
         })
@@ -35,7 +40,8 @@ class EasyHTTP {
         const response = await fetch(url, {
             method: 'PATCH',
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Authorization': 'Token fe207526177977cfc9f5453c48c6bcfc040f35f5'
             },
             body: JSON.stringify(data)
         })
@@ -48,7 +54,8 @@ class EasyHTTP {
         const response = await fetch(url, {
             method: 'PUT',
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Authorization': 'Token fe207526177977cfc9f5453c48c6bcfc040f35f5'
             },
             body: JSON.stringify(data)
         })
@@ -61,7 +68,8 @@ class EasyHTTP {
         const response = await fetch(url, {
             method: 'DELETE',
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Authorization': 'Token fe207526177977cfc9f5453c48c6bcfc040f35f5'
             }
         })
         const resData = await 'Resource deleted'

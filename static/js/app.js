@@ -25,6 +25,7 @@ document.querySelector('#login').addEventListener('click', () => {
                     }
                     http.post(`${server}/user/login`, data)
                         .then((response) => {
+                            // @@ TODO: Save token to LocalStorage
                             console.log(response)
                         }).catch((error) => {
                             console.error(error)
