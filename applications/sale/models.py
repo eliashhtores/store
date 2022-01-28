@@ -32,7 +32,7 @@ class Sale(TimeStampedModel):
     payment_type = models.CharField(max_length=2, choices=PAYMENT_TYPE_CHOICES)
     invoice_type = models.CharField(max_length=2, choices=INVOICE_TYPE_CHOICES)
     state = models.CharField(
-        max_length=2, choices=STATE_CHOICES, blank=True, null=True)
+        max_length=2, choices=STATE_CHOICES, default=STATE_CHOICES[0][0])
     canceled = models.BooleanField(default=False)
     address = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL,

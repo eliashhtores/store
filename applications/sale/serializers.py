@@ -28,7 +28,7 @@ class SaleSerializer(serializers.ModelSerializer):
 
 class ProcessDetailSerializer(serializers.Serializer):
 
-    sale = serializers.IntegerField()
+    id = serializers.IntegerField()
     quantity = serializers.IntegerField()
 
 

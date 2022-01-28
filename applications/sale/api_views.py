@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -26,19 +27,31 @@ class CreateSaleAPIView(CreateAPIView):
         invoice_type = serializer.validated_data['invoice_type']
         payment_type = serializer.validated_data['payment_type']
         address = serializer.validated_data['address']
+        sale = Sale.objects.create(
+            date=timezone.now(),
+            amount=0,
+            quantity=0,
+            invoice_type=invoice_type,
+            payment_type=payment_type,
+            address=address,
+            user=request.user
+        )
+        products = serializer.validated_data['products']
+        details = []
 
-        return Response({'test': 'ok'})
+        for product in products:
+            detail = Detail(
+                sale=sale,
+                product_id=product['id'],
+                quantity=product['quantity'],
+            )
+            details.append(detail)
 
-        # data = request.data
-        # sale = Sale.objects.create(
-        #     invoice_type=data['invoice_type'],
-        #     payment_type=data['payment_type'],
-        #     address=data['address'],
-        # )
-        # for product in data['products']:
-        #     Detail.objects.create(
-        #         sale=sale,
-        #         product_id=product['id'],
-        #         quantity=product['quantity'],
-        #     )
-        # return super().create(request, *args, **kwargs)
+        sale.amount = sum(
+            [detail.product.price * detail.quantity for detail in details])
+        sale.quantity = sum([detail.quantity for detail in details])
+        sale.save()
+
+        Detail.objects.bulk_create(details)
+
+        return Response(SaleSerializer(sale).data, status=201)
