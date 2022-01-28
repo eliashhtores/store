@@ -1,8 +1,16 @@
+from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from .models import Product
-from .serializers import ProductSerializer
+from .models import Product, Color
+from .serializers import ProductSerializer, ColorSerializer
+
+
+class ColorViewSet(viewsets.ModelViewSet):
+    serializer_class = ColorSerializer
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Color.objects.all()
 
 
 class ProductListByUserAPIView(ListAPIView):

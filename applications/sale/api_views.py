@@ -21,7 +21,7 @@ class CreateSaleAPIView(CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request):
         serializer = ProcessSaleSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         invoice_type = serializer.validated_data['invoice_type']

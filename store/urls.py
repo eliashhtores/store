@@ -10,5 +10,6 @@ urlpatterns = [
     re_path('', include('applications.user.api_urls')),
     re_path('', include('applications.product.urls')),
     re_path('', include('applications.product.api_urls')),
+    re_path('', include('applications.product.routers')),
     re_path('', include('applications.sale.api_urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
