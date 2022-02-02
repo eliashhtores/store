@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import serializers, pagination
 from .models import Product, Color
 
 
@@ -20,3 +20,15 @@ class ProductSerializer(serializers.ModelSerializer):
         # extra_kwargs = {
         #     'product': {'view_name': 'product_app_api:api_detail', 'lookup_field': 'pk'}
         # }
+
+
+class ProductPaginatorSerializer(pagination.PageNumberPagination):
+    page_size = 5
+    max_page_size = 100
+
+
+class ProductViewSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Product
+        fields = ('__all__')

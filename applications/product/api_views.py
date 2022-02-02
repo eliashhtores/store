@@ -2,20 +2,33 @@ from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.response import Response
 from .models import Product, Color
-from .serializers import ProductSerializer, ColorSerializer
+from .serializers import ProductSerializer, ProductPaginatorSerializer, ColorSerializer
 
 
 class ColorViewSet(viewsets.ModelViewSet):
     serializer_class = ColorSerializer
     # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = Color.objects.all()
+
+    def create(self, request):
+        print(request.data)
+        return Response({'status': 'ok'})
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+    serializer_class = ProductSerializer
+    pagination_class = ProductPaginatorSerializer
+    # authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Product.objects.all()
 
 
 class ProductListByUserAPIView(ListAPIView):
     serializer_class = ProductSerializer
-    authentication_classes = [TokenAuthentication]
+    # authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
