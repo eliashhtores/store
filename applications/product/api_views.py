@@ -4,7 +4,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from .models import Product, Color
-from .serializers import ProductSerializer, ProductPaginatorSerializer, ColorSerializer
+from .serializers import ProductSerializer, ProductViewSetSerializer, ProductPaginatorSerializer, ColorSerializer
 
 
 class ColorViewSet(viewsets.ModelViewSet):
@@ -15,7 +15,7 @@ class ColorViewSet(viewsets.ModelViewSet):
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    serializer_class = ProductSerializer
+    serializer_class = ProductViewSetSerializer
     pagination_class = ProductPaginatorSerializer
     # authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -23,7 +23,22 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(video='https://www.youtube.com/embed/')
-        return Response({'status': 'Product created successfully!'})
+        return Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = ProductSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        serializer = ProductSerializer(self.get_object())
+        return Response(serializer.data)
 
 
 class ProductListByUserAPIView(ListAPIView):
