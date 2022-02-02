@@ -30,6 +30,7 @@ class ProcessDetailSerializer(serializers.Serializer):
 
     id = serializers.IntegerField()
     quantity = serializers.IntegerField()
+    color = serializers.IntegerField()
 
 
 class ProcessSaleSerializer(serializers.Serializer):

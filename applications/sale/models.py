@@ -2,7 +2,7 @@ from re import U
 from django.db import models
 from django.conf import settings
 from model_utils.models import TimeStampedModel
-from applications.product.models import Product
+from applications.product.models import Product, Color
 from .managers import DetailManager
 
 
@@ -45,6 +45,8 @@ class Sale(TimeStampedModel):
 class Detail(TimeStampedModel):
     sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    color = models.ForeignKey(
+        Color, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.PositiveIntegerField(
         default=1, null=True, blank=True)
     canceled = models.BooleanField(default=False)

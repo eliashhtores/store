@@ -1,8 +1,10 @@
 from django.utils import timezone
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework import viewsets
+from rest_framework.generics import ListAPIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+from applications.product.models import Color
 from .models import Sale, Detail
 from .serializers import SaleSerializer, ProcessSaleSerializer
 
@@ -16,10 +18,15 @@ class SaleListAPIView(ListAPIView):
         return Sale.objects.all()
 
 
-class CreateSaleAPIView(CreateAPIView):
-    serializer_class = ProcessSaleSerializer
+class SaleViewSet(viewsets.ViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Sale.objects.all().order_by('-id')
+
+    def list(self, request, *args, **kwargs):
+        queryset = Sale.objects.all().order_by('-id')
+        serializer = SaleSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request):
         serializer = ProcessSaleSerializer(data=request.data)
@@ -40,10 +47,12 @@ class CreateSaleAPIView(CreateAPIView):
         details = []
 
         for product in products:
+            color = Color.objects.get(id=product['color'])
             detail = Detail(
                 sale=sale,
                 product_id=product['id'],
                 quantity=product['quantity'],
+                color=color
             )
             details.append(detail)
 
@@ -55,3 +64,8 @@ class CreateSaleAPIView(CreateAPIView):
         Detail.objects.bulk_create(details)
 
         return Response(SaleSerializer(sale).data, status=201)
+
+    def retrieve(self, request, pk=None):
+        sale = Sale.objects.get(id=pk)
+        serializer = SaleSerializer(sale)
+        return Response(serializer.data)
