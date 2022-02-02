@@ -9,13 +9,9 @@ from .serializers import ProductSerializer, ProductPaginatorSerializer, ColorSer
 
 class ColorViewSet(viewsets.ModelViewSet):
     serializer_class = ColorSerializer
-    # authentication_classes = [TokenAuthentication]
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = Color.objects.all()
-
-    def create(self, request):
-        print(request.data)
-        return Response({'status': 'ok'})
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -23,12 +19,16 @@ class ProductViewSet(viewsets.ModelViewSet):
     pagination_class = ProductPaginatorSerializer
     # authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by('-id')
+
+    def perform_create(self, serializer):
+        serializer.save(video='https://www.youtube.com/embed/')
+        return Response({'status': 'Product created successfully!'})
 
 
 class ProductListByUserAPIView(ListAPIView):
     serializer_class = ProductSerializer
-    # authentication_classes = [TokenAuthentication]
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
