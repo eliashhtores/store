@@ -1,8 +1,9 @@
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
 from applications.product.models import Color
 from .models import Sale, Detail
@@ -20,8 +21,14 @@ class SaleListAPIView(ListAPIView):
 
 class SaleViewSet(viewsets.ViewSet):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = Sale.objects.all().order_by('-id')
+
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = [AllowAny]
+
+        return [permission() for permission in permission_classes]
 
     def list(self, request, *args, **kwargs):
         queryset = Sale.objects.all().order_by('-id')
@@ -66,6 +73,6 @@ class SaleViewSet(viewsets.ViewSet):
         return Response(SaleSerializer(sale).data, status=201)
 
     def retrieve(self, request, pk=None):
-        sale = Sale.objects.get(id=pk)
+        sale = get_object_or_404(Sale.objects.all(), pk=pk)
         serializer = SaleSerializer(sale)
         return Response(serializer.data)

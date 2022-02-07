@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from applications.product.serializers import ProductSerializer
+from applications.product.models import Product
 from .models import Sale, Detail
 
 
@@ -34,8 +35,9 @@ class ProcessDetailSerializer(serializers.Serializer):
 
 
 class ProcessSaleSerializer(serializers.Serializer):
-
-    invoice_type = serializers.CharField()
-    payment_type = serializers.CharField()
+    invoice_type = serializers.ChoiceField(
+        choices=Sale.INVOICE_TYPE_CHOICES)
+    payment_type = serializers.ChoiceField(
+        choices=Sale.PAYMENT_TYPE_CHOICES)
     address = serializers.CharField()
     products = ProcessDetailSerializer(many=True)
